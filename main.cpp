@@ -162,7 +162,7 @@ bool checkForSpam(ourvector<string> email, string emailName)
     	else
     	{
         	return false; // Spam not found in search
-   	 }
+	}
 
 } // End of checkForSpam()
 //
@@ -218,12 +218,12 @@ void filterEmailList(ourvector<string> email, string file, string outFile)
            		}
         	}	
         
-    	infile >> messageID;       // Update input 
-        infile >> emailAddress;
-	getline(infile, subject);
-        emailsProcessed++;         // Increment total emails 
+    		infile >> messageID;       // Update input 
+       	 	infile >> emailAddress;
+		getline(infile, subject);
+        	emailsProcessed++;         // Increment total emails 
         
-    }
+	} // End of loop
 
 	infile.close(); // Close the input file
     	oFile.close();  // Close the output file
