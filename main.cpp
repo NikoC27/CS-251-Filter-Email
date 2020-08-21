@@ -43,12 +43,12 @@ void loadSpamList(ourvector<string>& email, string file)
 	if (!infile.is_open())
 	{
 		cout << "**Error, unable to open " << "'" << file << "'" 
-             << endl;
+                << endl;
 		return;
 	}
 
 	while (!infile.eof())
-    {
+    	{
 		getline(infile, line);
 
 		if (line != "")              // Check for blank lines
@@ -56,9 +56,9 @@ void loadSpamList(ourvector<string>& email, string file)
 			emailCounter++;          // Increment number of emails in spam file
 			email.push_back(line);   // Push back lines to vector
 		}
-    }
+   	 }
 
-    infile.close(); // Close the file
+	infile.close(); // Close the file
 
 	cout << "Loading " << "'" << file << "'" << endl;              
 	cout << "# of spam entries: " << emailCounter << endl << endl; 
@@ -88,7 +88,7 @@ void displaySpamList(ourvector<string> email)
 
 	}
     
-    cout << endl;
+	cout << endl;
     
 } // End of displaySpamList()
 //
@@ -106,26 +106,28 @@ bool binarySearch(ourvector<string> email, string emailName)
 	int mid = 0;
 
 	while (low <= high) 
-    {
+	{
 		mid = low + (high - low) / 2; 
 		string midElement = email[mid]; // Find middle of the vector
 
 		if (midElement > emailName) 
-        {
+        	{
 			high = mid - 1;
 		}
 		else if (midElement < emailName) 
-        {
+        	{
 			low = mid + 1;
 		}
 
 		else 
-        {
+       		 {
 			return true;
 		}
 	
-    }
-    return false;
+	}
+	
+	return false;
+	
 } // End of binarySearch()
 //
 // ----------------------------------------------------------------------------
@@ -140,27 +142,27 @@ bool binarySearch(ourvector<string> email, string emailName)
 //
 bool checkForSpam(ourvector<string> email, string emailName) 
 {
-    string domain = "";             // String after the @ symbol
+	string domain = "";             // String after the @ symbol
 	string userName = "";           // String before the @ symbol
 	string stringName = "";         // String used after concatenation
-    string stringNameStar = "";     // String used after concatenation accounts for "*'
+	string stringNameStar = "";     // String used after concatenation accounts for "*'
 	size_t position = 0;            // Index of string
 
 	position = emailName.find('@'); // Update position to index of character
 	userName = emailName.substr(0, position); // Index: 0 - @
 	domain = emailName.substr(position + 1 , string :: npos); // Index @ + 1 to the last index
 	stringName = domain + ":" + userName; // Email name changed
-    stringNameStar = domain + ":" + "*";  // Email name changed and * accounted for
+	stringNameStar = domain + ":" + "*";  // Email name changed and * accounted for
     
-    if (binarySearch(email, stringName) == true || binarySearch(email, stringNameStar) == true)
-    {
-        return true; // Spam found in search
-    }
+	if (binarySearch(email, stringName) == true || binarySearch(email, stringNameStar) == true)
+    	{
+       		return true; // Spam found in search
+    	}
     
-    else
-    {
-        return false; // Spam not found in search
-    }
+    	else
+    	{
+        	return false; // Spam not found in search
+   	 }
 
 } // End of checkForSpam()
 //
@@ -176,58 +178,58 @@ bool checkForSpam(ourvector<string> email, string emailName)
 // 
 void filterEmailList(ourvector<string> email, string file, string outFile)
 {
-    int messageID = 0;            // ID number of the email
-    string emailAddress = "";     // Email Address
-    string subject = "";          // Subject written after email
-    int emailsProcessed = 0;      // Counts number of emails processed
-    int nonspamEmails = 0;        // Counts number of non-spam emails
+	int messageID = 0;            // ID number of the email
+    	string emailAddress = "";     // Email Address
+    	string subject = "";          // Subject written after email
+    	int emailsProcessed = 0;      // Counts number of emails processed
+    	int nonspamEmails = 0;        // Counts number of non-spam emails
     
-    ifstream infile;              // Read from file
+    	ifstream infile;              // Read from file
 	infile.open(file);            // Open file
     
 	if (!infile.is_open())
 	{
 		cout << "**Error, unable to open " << "'" << file << "'" 
-             << endl;
+             	<< endl;
 		return;
 	}
     
-    ofstream oFile;               // Write to output file
-    oFile.open(outFile);          // Open output file
+   	ofstream oFile;               // Write to output file
+ 	oFile.open(outFile);          // Open output file
     
-    if (!oFile.good())
-    {
-        return;
-    }
+	if (!oFile.good())
+	{
+        	return;
+   	}
     
-    infile >> messageID;          // Gets input for ID number
-    infile >> emailAddress;       // Gets input for email address
-    getline(infile, subject);     // Gets input for the subject
+	infile >> messageID;          // Gets input for ID number
+    	infile >> emailAddress;       // Gets input for email address
+    	getline(infile, subject);     // Gets input for the subject
     
 	while (!infile.eof())
 	{
-        if (!infile.fail())
-        {
-            // Prints line to file when there is no spam 
-             if (!checkForSpam(email, emailAddress)) 
-            {    
-                 oFile << messageID << " " << emailAddress << " " << subject << endl;
-                 nonspamEmails++; // Increment non-spam emails
-            }
-        }
+        	if (!infile.fail())
+        	{
+            		// Prints line to file when there is no spam 
+             		if (!checkForSpam(email, emailAddress)) 
+           		{    
+                 		oFile << messageID << " " << emailAddress << " " << subject << endl;
+                		nonspamEmails++; // Increment non-spam emails
+           		}
+        	}	
         
-        infile >> messageID;       // Update input 
+    	infile >> messageID;       // Update input 
         infile >> emailAddress;
-		getline(infile, subject);
+	getline(infile, subject);
         emailsProcessed++;         // Increment total emails 
         
     }
 
-    infile.close(); // Close the input file
-    oFile.close();  // Close the output file
+	infile.close(); // Close the input file
+    	oFile.close();  // Close the output file
     
-    cout << "# emails processed: " << emailsProcessed << endl;
-    cout << "# non-spam emails:  " << nonspamEmails << endl << endl;
+    	cout << "# emails processed: " << emailsProcessed << endl;
+    	cout << "# non-spam emails:  " << nonspamEmails << endl << endl;
     
 } // End of filterEmailList()
 // 
@@ -237,10 +239,10 @@ void filterEmailList(ourvector<string> email, string file, string outFile)
 //
 int main()
 {
-    string userInput = "";       // Prompt user to load, display, check or filter
+	string userInput = "";       // Prompt user to load, display, check or filter
 	string file = "";            // Prompt user for file name
 	string emailName = "";       // Prompt user for email name
-    string outFile = "";         // Prompt user for output file
+    	string outFile = "";         // Prompt user for output file
 	ourvector<string> email;     // Declare email vector
     
 	cout << "** Welcome to spam filtering app **" << endl << endl;
@@ -262,34 +264,35 @@ int main()
 		{
 			cin >> emailName;
             
-               // Check for spam
+               		// Check for spam
 			if (checkForSpam(email, emailName) == true)
-            {
-                // Email is spam
-                cout << emailName << " is spam" << endl << endl; 
-            }
-            else
-            {
-                // Email is not spam
-                cout << emailName << " is not spam" << endl << endl;
-            }
+           		 {
+                		// Email is spam
+                		cout << emailName << " is spam" << endl << endl; 
+            		 }
+            		else
+           	 	{
+                		// Email is not spam
+                		cout << emailName << " is not spam" << endl << endl;
+            		}
             
 		}
-        else if (userInput == "filter")
-        {
-            cin >> file;
-            cin >> outFile;
-            filterEmailList(email, file, outFile);  // Filter through emails
-        }
-        else
-        {
-            cout << "**invalid command" << endl << endl; // Check for invalid commands
-        }
+        	else if (userInput == "filter")
+        	{
+          		cin >> file;
+            		cin >> outFile;
+            		filterEmailList(email, file, outFile);  // Filter through emails
+       		}
+        	else
+        	{
+            		cout << "**invalid command" << endl << endl; // Check for invalid commands
+        	}
 		
 		cout << "Enter command or # to exit> ";  // Update for user input
 		cin >> userInput;
         
-    } // End of loop
+	
+	} // End of loop
 
 	return 0;
     
